@@ -1,5 +1,4 @@
 defmodule AsNestedSet.Helper do
-
   def get_column_name(%{__struct__: struct}, field) do
     get_column_name(struct, field)
   end
@@ -19,6 +18,4 @@ defmodule AsNestedSet.Helper do
   def fields(module) when is_atom(module) do
     module.__as_nested_set_fields__()
   end
-
-
 end

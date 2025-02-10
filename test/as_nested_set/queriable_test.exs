@@ -90,11 +90,12 @@ defmodule AsNestedSet.QueriableTest do
 
   test "leaves/2 should return all leaves" do
     create_tree(1)
+
     assert match(leaves(Taxon, %{taxonomy_id: 1}) |> execute(), [
-      %{name: "n00", lft: 1, rgt: 2, taxonomy_id: 1},
-      %{name: "n010", lft: 4, rgt: 5, taxonomy_id: 1},
-      %{name: "n011", lft: 6, rgt: 7, taxonomy_id: 1},
-    ])
+             %{name: "n00", lft: 1, rgt: 2, taxonomy_id: 1},
+             %{name: "n010", lft: 4, rgt: 5, taxonomy_id: 1},
+             %{name: "n011", lft: 6, rgt: 7, taxonomy_id: 1}
+           ])
   end
 
   test "descendants/1 returns all decendants" do

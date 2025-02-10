@@ -12,11 +12,16 @@ defmodule AsNestedSet.ScopedTest do
   end
 
   test "same_scope/2 should return true for models with the same scope field value" do
-    assert AsNestedSet.Scoped.same_scope?(%Sample{scope_field: "same", non_scope_field: "diff0"}, %Sample{scope_field: "same", non_scope_field: "diff1"})
+    assert AsNestedSet.Scoped.same_scope?(
+             %Sample{scope_field: "same", non_scope_field: "diff0"},
+             %Sample{scope_field: "same", non_scope_field: "diff1"}
+           )
   end
 
   test "same_scope/2 should return false for models with different scope field value" do
-    assert !AsNestedSet.Scoped.same_scope?(%Sample{scope_field: "diff0"}, %Sample{scope_field: "diff1"})
+    assert !AsNestedSet.Scoped.same_scope?(%Sample{scope_field: "diff0"}, %Sample{
+             scope_field: "diff1"
+           })
   end
 
   describe "scope/1" do

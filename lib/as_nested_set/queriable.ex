@@ -108,6 +108,7 @@ defmodule AsNestedSet.Queriable do
     fn repo ->
       left_column = get_column_name(module, :left)
       right_column = get_column_name(module, :right)
+
       from(q in module,
         where: fragment("? - ?", field(q, ^right_column), field(q, ^left_column)) == 1,
         order_by: ^[left_column]

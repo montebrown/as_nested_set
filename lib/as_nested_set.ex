@@ -1,6 +1,7 @@
 defmodule AsNestedSet do
   defmacro __using__(args) do
     scope = Keyword.get(args, :scope, [])
+
     quote do
       use AsNestedSet.Model
       use AsNestedSet.Scoped, scope: unquote(scope)
@@ -9,7 +10,7 @@ defmodule AsNestedSet do
 
   @type t :: struct
 
-  @type executable :: (Ecto.Repo.t -> any)
+  @type executable :: (Ecto.Repo.t() -> any)
 
   @spec defined?(struct) :: boolean
   def defined?(struct) when is_atom(struct) do
@@ -21,12 +22,14 @@ defmodule AsNestedSet do
         false
     end
   end
+
   def defined?(%{__struct__: struct}) do
     defined?(struct)
   end
+
   def defined?(_), do: false
 
-  @spec execute(executable, Ecto.Repo.t) :: any
+  @spec execute(executable, Ecto.Repo.t()) :: any
   def execute(call, repo) do
     call.(repo)
   end

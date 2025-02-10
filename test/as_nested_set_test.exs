@@ -1,5 +1,4 @@
 defmodule AsNestedSetTest do
-
   use ExUnit.Case
 
   defmodule Sample do
@@ -15,7 +14,7 @@ defmodule AsNestedSetTest do
     @right_column :right
     defstruct node_id: "node_id", left: "left", right: "right", pid: "parent_id"
   end
-  
+
   defmodule Undefined do
     defstruct id: "id"
   end
@@ -41,20 +40,40 @@ defmodule AsNestedSetTest do
   test "should define __as_nested_set_set_field__(model, field, value)" do
     sample = %Sample{}
     redefined = %Redefined{}
-    sample = @fields |> Enum.reduce(sample, fn field, sample ->
-      Sample.__as_nested_set_set_field__(sample, field, "test_value")
-    end)
-    assert %Sample{id: "test_value", lft: "test_value", rgt: "test_value", parent_id: "test_value"} == sample
 
-    redefined = @fields |> Enum.reduce(redefined, fn field, redefined ->
-      Redefined.__as_nested_set_set_field__(redefined, field, "test_value")
-    end)
-    assert %Redefined{node_id: "test_value", left: "test_value", right: "test_value", pid: "test_value"} == redefined
+    sample =
+      @fields
+      |> Enum.reduce(sample, fn field, sample ->
+        Sample.__as_nested_set_set_field__(sample, field, "test_value")
+      end)
+
+    assert %Sample{
+             id: "test_value",
+             lft: "test_value",
+             rgt: "test_value",
+             parent_id: "test_value"
+           } == sample
+
+    redefined =
+      @fields
+      |> Enum.reduce(redefined, fn field, redefined ->
+        Redefined.__as_nested_set_set_field__(redefined, field, "test_value")
+      end)
+
+    assert %Redefined{
+             node_id: "test_value",
+             left: "test_value",
+             right: "test_value",
+             pid: "test_value"
+           } == redefined
   end
 
   test "should define __as_nested_set_fields__" do
-    assert %{left: :lft, node_id: :id, parent_id: :parent_id, right: :rgt} == Sample.__as_nested_set_fields__
-    assert %{left: :left, node_id: :node_id, parent_id: :pid, right: :right} == Redefined.__as_nested_set_fields__
+    assert %{left: :lft, node_id: :id, parent_id: :parent_id, right: :rgt} ==
+             Sample.__as_nested_set_fields__()
+
+    assert %{left: :left, node_id: :node_id, parent_id: :pid, right: :right} ==
+             Redefined.__as_nested_set_fields__()
   end
 
   test "should define child?(model)" do
@@ -64,12 +83,13 @@ defmodule AsNestedSetTest do
     assert Redefined.child?(%Redefined{pid: "parent_id"})
     refute Redefined.child?(%Redefined{pid: nil})
   end
-  
+
   describe "AsNestedSet.defined?/1" do
     test "should return true for a struct defined AsNestedSet" do
       assert AsNestedSet.defined?(Sample)
       assert AsNestedSet.defined?(%Sample{})
     end
+
     test "should return false for a module defined AsNestedSet" do
       refute AsNestedSet.defined?(Undefined)
       refute AsNestedSet.defined?(%Undefined{})
